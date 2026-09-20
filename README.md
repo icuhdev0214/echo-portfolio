@@ -27,9 +27,12 @@ the full stack rationale.
   to `main` deploy to production automatically. No custom deploy workflow
   needed; `vercel.json` just pins the framework/build/install commands so
   the project auto-configures consistently
+- **Testing:** end-to-end smoke tests with [Playwright](https://playwright.dev)
+  (`e2e/`), covering the home page, the contact form (success/error/honeypot/
+  pre-fill), and the `/studio` route
 - **CI:** GitHub Actions (`.github/workflows/ci.yml`), split into parallel
-  `lint`, `typecheck`, and `build` jobs for fast PR feedback — a gate
-  independent of Vercel's own pipeline
+  `lint`, `typecheck`, and `build` (which also runs the e2e suite) jobs for
+  fast PR feedback — a gate independent of Vercel's own pipeline
 - **Dependency updates:** Dependabot (`.github/dependabot.yml`) opens weekly
   PRs against `dev` for npm and Actions dependencies (patch/minor grouped
   into one PR to cut down on noise)
@@ -65,6 +68,18 @@ See `.env.example`. Without `NEXT_PUBLIC_SANITY_PROJECT_ID`/`DATASET` set,
 pages fall back to an empty project list instead of failing to build; without
 `RESEND_API_KEY`/`CONTACT_TO_EMAIL`, contact form submissions are logged to
 the server console instead of emailed.
+
+### Running tests
+
+```bash
+npm run test:e2e
+```
+
+Runs against a local dev server that Playwright starts automatically. In
+this sandboxed environment, Chromium is pre-installed outside Playwright's
+usual cache — point `playwright.config.ts` at it with
+`PLAYWRIGHT_CHROMIUM_PATH=/opt/pw-browsers/chromium npm run test:e2e` instead
+of running `playwright install`. CI installs its own browser normally.
 
 ### Sanity setup
 
