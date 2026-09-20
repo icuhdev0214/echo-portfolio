@@ -1,0 +1,73 @@
+# echo-portfolio
+
+Freelance portfolio: Next.js (App Router) + Tailwind + a light layer of
+hand-written shadcn-style components, content managed through an embedded
+Sanity Studio, contact handled by a serverless route via Resend. No
+traditional backend server — see `.claude/plans` history / project notes for
+the full stack rationale.
+
+## Stack
+
+- **Frontend:** Next.js 16 (App Router, TypeScript), Tailwind CSS v4
+- **UI primitives:** hand-written shadcn-style components in
+  `src/components/ui` (Radix UI + `class-variance-authority` + `tailwind-merge`)
+  — the shadcn CLI itself needs network access to `ui.shadcn.com`, which isn't
+  always available, so components are added by hand following the same
+  pattern
+- **CMS:** [Sanity](https://sanity.io), embedded at `/studio` via
+  `next-sanity`. Content is fetched with GROQ and revalidated on-demand via a
+  webhook (`/api/revalidate`) instead of a full redeploy
+- **Contact:** `/api/contact` route sends mail via [Resend](https://resend.com);
+  falls back to logging the submission if `RESEND_API_KEY`/`CONTACT_TO_EMAIL`
+  aren't set (e.g. local dev)
+- **Deployment:** Vercel, with its native git-based CI/CD (preview
+  deployments per push, production on merge to `main`)
+- **CI:** a separate GitHub Actions workflow (`.github/workflows/ci.yml`)
+  runs lint/typecheck/build on every PR as a required check
+
+No Docker anywhere in this pipeline — Vercel builds directly from the repo,
+and there's no self-hosted infrastructure to containerize.
+
+## Getting started
+
+```bash
+npm install
+cp .env.example .env.local   # then fill in your Sanity project + Resend keys
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) for the site, and
+[http://localhost:3000/studio](http://localhost:3000/studio) for the CMS
+(sign in with Sanity's own hosted auth — no separate login page needed).
+
+### Environment variables
+
+See `.env.example`. Without `NEXT_PUBLIC_SANITY_PROJECT_ID`/`DATASET` set,
+pages fall back to an empty project list instead of failing to build; without
+`RESEND_API_KEY`/`CONTACT_TO_EMAIL`, contact form submissions are logged to
+the server console instead of emailed.
+
+### Sanity setup
+
+1. Create a project at [sanity.io/manage](https://www.sanity.io/manage) and
+   copy its project ID into `.env.local`.
+2. Run the app and visit `/studio` — the `project` schema
+   (`src/sanity/schemaTypes/project.ts`) is already wired up.
+3. Optionally add a webhook (Settings → API → Webhooks) pointed at
+   `/api/revalidate` with the same secret as `SANITY_REVALIDATE_SECRET`, so
+   publishing content goes live without a redeploy.
+
+## Design
+
+The visual design comes from a Claude Design prototype ("Portfolio Prototype
+Horizontal", built on the "nocturne" design system). The current pages are a
+structural scaffold — layout and data flow are in place, but styling should
+be replaced with the ported design tokens/markup once that project is
+imported (see the plan notes for how to bring it in via Claude Design's
+"Send to Claude Code Web").
+
+## Deploy
+
+Connect the repo to a Vercel project and set the environment variables above
+in the Vercel dashboard. Every push gets a preview deployment; merges to
+`main` deploy to production automatically.
