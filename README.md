@@ -1,5 +1,7 @@
 # echo-portfolio
 
+[![CI](https://github.com/icuhdev0214/echo-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/icuhdev0214/echo-portfolio/actions/workflows/ci.yml)
+
 Freelance portfolio: Next.js (App Router) + Tailwind + a light layer of
 hand-written shadcn-style components, content managed through an embedded
 Sanity Studio, contact handled by a serverless route via Resend. No
@@ -20,13 +22,33 @@ the full stack rationale.
 - **Contact:** `/api/contact` route sends mail via [Resend](https://resend.com);
   falls back to logging the submission if `RESEND_API_KEY`/`CONTACT_TO_EMAIL`
   aren't set (e.g. local dev)
-- **Deployment:** Vercel, with its native git-based CI/CD (preview
-  deployments per push, production on merge to `main`)
-- **CI:** a separate GitHub Actions workflow (`.github/workflows/ci.yml`)
-  runs lint/typecheck/build on every PR as a required check
+- **Deployment (CD):** Vercel, with its native git-based deploy pipeline —
+  once the repo is linked, every push gets a preview deployment and merges
+  to `main` deploy to production automatically. No custom deploy workflow
+  needed; `vercel.json` just pins the framework/build/install commands so
+  the project auto-configures consistently
+- **Testing:** end-to-end smoke tests with [Playwright](https://playwright.dev)
+  (`e2e/`), covering the home page, the contact form (success/error/honeypot/
+  pre-fill), and the `/studio` route
+- **CI:** GitHub Actions (`.github/workflows/ci.yml`), split into parallel
+  `lint`, `typecheck`, and `build` (which also runs the e2e suite) jobs for
+  fast PR feedback — a gate independent of Vercel's own pipeline
+- **Dependency updates:** Dependabot (`.github/dependabot.yml`) opens weekly
+  PRs against `dev` for npm and Actions dependencies (patch/minor grouped
+  into one PR to cut down on noise)
 
 No Docker anywhere in this pipeline — Vercel builds directly from the repo,
 and there's no self-hosted infrastructure to containerize.
+
+### Branch strategy & required checks
+
+- `main` — production (deploys to production on Vercel)
+- `dev` — integration branch (deploys to a Vercel preview environment)
+- `feature/*` — one per unit of work, branched off `dev`, PR'd back into `dev`
+
+Recommended GitHub branch protection (Settings → Branches), once you're
+ready to enforce it: require the `lint`, `typecheck`, and `build` checks to
+pass and require a PR (no direct pushes) on both `main` and `dev`.
 
 ## Getting started
 
@@ -46,6 +68,18 @@ See `.env.example`. Without `NEXT_PUBLIC_SANITY_PROJECT_ID`/`DATASET` set,
 pages fall back to an empty project list instead of failing to build; without
 `RESEND_API_KEY`/`CONTACT_TO_EMAIL`, contact form submissions are logged to
 the server console instead of emailed.
+
+### Running tests
+
+```bash
+npm run test:e2e
+```
+
+Runs against a local dev server that Playwright starts automatically. In
+this sandboxed environment, Chromium is pre-installed outside Playwright's
+usual cache — point `playwright.config.ts` at it with
+`PLAYWRIGHT_CHROMIUM_PATH=/opt/pw-browsers/chromium npm run test:e2e` instead
+of running `playwright install`. CI installs its own browser normally.
 
 ### Sanity setup
 
