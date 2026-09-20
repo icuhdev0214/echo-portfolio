@@ -7,7 +7,12 @@ export interface Project {
   summary: string;
   role?: string;
   client?: string;
+  domain?: string;
   date?: string;
+  problem?: string;
+  approach?: string;
+  outcomes?: { value: string; label: string }[];
+  headline?: string;
   tags?: string[];
   images?: Image[];
   videoUrl?: string;

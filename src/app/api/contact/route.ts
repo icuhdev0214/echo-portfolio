@@ -23,12 +23,13 @@ export async function POST(req: Request) {
   const name = typeof body.name === "string" ? body.name.trim() : "";
   const email = typeof body.email === "string" ? body.email.trim() : "";
   const projectType = typeof body.projectType === "string" ? body.projectType : "";
+  const budget = typeof body.budget === "string" ? body.budget.trim() : "";
   const message = typeof body.message === "string" ? body.message.trim() : "";
   const project = typeof body.project === "string" ? body.project.trim() : "";
   // Honeypot: real visitors never fill this hidden field in.
-  const company = typeof body.company === "string" ? body.company.trim() : "";
+  const companyUrl = typeof body.company_url === "string" ? body.company_url.trim() : "";
 
-  if (company) {
+  if (companyUrl) {
     // Silently pretend success so bots don't learn to skip the field.
     return NextResponse.json({ ok: true });
   }
@@ -57,6 +58,7 @@ export async function POST(req: Request) {
       name,
       email,
       projectType,
+      budget,
       project,
       message,
     });
@@ -75,6 +77,7 @@ export async function POST(req: Request) {
       `Name: ${name}`,
       `Email: ${email}`,
       projectType ? `Project type: ${projectType}` : null,
+      budget ? `Budget: ${budget}` : null,
       project ? `Regarding project: ${project}` : null,
       "",
       message,
