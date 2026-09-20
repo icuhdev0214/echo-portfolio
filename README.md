@@ -22,8 +22,11 @@ the full stack rationale.
   aren't set (e.g. local dev)
 - **Deployment:** Vercel, with its native git-based CI/CD (preview
   deployments per push, production on merge to `main`)
+- **Testing:** end-to-end smoke tests with [Playwright](https://playwright.dev)
+  (`e2e/`), covering the home page, the contact form (success/error/honeypot/
+  pre-fill), and the `/studio` route
 - **CI:** a separate GitHub Actions workflow (`.github/workflows/ci.yml`)
-  runs lint/typecheck/build on every PR as a required check
+  runs lint/typecheck/build/e2e on every PR as a required check
 
 No Docker anywhere in this pipeline — Vercel builds directly from the repo,
 and there's no self-hosted infrastructure to containerize.
@@ -46,6 +49,18 @@ See `.env.example`. Without `NEXT_PUBLIC_SANITY_PROJECT_ID`/`DATASET` set,
 pages fall back to an empty project list instead of failing to build; without
 `RESEND_API_KEY`/`CONTACT_TO_EMAIL`, contact form submissions are logged to
 the server console instead of emailed.
+
+### Running tests
+
+```bash
+npm run test:e2e
+```
+
+Runs against a local dev server that Playwright starts automatically. In
+this sandboxed environment, Chromium is pre-installed outside Playwright's
+usual cache — point `playwright.config.ts` at it with
+`PLAYWRIGHT_CHROMIUM_PATH=/opt/pw-browsers/chromium npm run test:e2e` instead
+of running `playwright install`. CI installs its own browser normally.
 
 ### Sanity setup
 
