@@ -105,3 +105,14 @@ imported (see the plan notes for how to bring it in via Claude Design's
 Connect the repo to a Vercel project and set the environment variables above
 in the Vercel dashboard. Every push gets a preview deployment; merges to
 `main` deploy to production automatically.
+
+### Current deployment
+
+Live on Vercel under the "Jerico's projects" team, project `echo-portfolio`,
+linked to this repo with `main` as the production branch. It's currently
+running with placeholder Sanity env vars
+(`NEXT_PUBLIC_SANITY_PROJECT_ID=placeholder`) until a real Sanity project is
+set up, so the project list renders empty; the contact form is in log-only
+mode until `RESEND_API_KEY`/`CONTACT_TO_EMAIL` are set. Swap in real values
+in the Vercel project's Environment Variables settings whenever ready — no
+code changes needed.
