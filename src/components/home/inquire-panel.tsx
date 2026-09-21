@@ -6,10 +6,13 @@ import { PERSON } from "@/lib/site-content";
 export function InquirePanel() {
   return (
     <section
-      className="flex h-full w-screen shrink-0 items-center overflow-y-auto px-[clamp(34px,7vw,110px)] py-24"
+      className="flex h-full w-screen shrink-0 items-[safe_center] overflow-y-auto px-[clamp(34px,7vw,110px)] py-24"
       style={{ scrollSnapAlign: "start" }}
     >
-      <div className="grid w-full max-w-[1040px] items-start gap-[clamp(28px,5vw,64px)]" style={{ gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)" }}>
+      <div
+        className="grid w-full max-w-[1040px] items-start gap-[clamp(28px,5vw,64px)]"
+        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(300px,100%), 1fr))" }}
+      >
         <div>
           <div className="text-[11px] font-medium uppercase tracking-[.1em] text-[#b5abfc]">Start a project</div>
           <h2 className="m-0 mt-4 max-w-[20ch] text-[clamp(24px,3.2vw,38px)] font-light leading-[1.16] tracking-[-.025em]">

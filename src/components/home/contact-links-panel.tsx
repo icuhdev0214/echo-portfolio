@@ -3,7 +3,7 @@ import { CONTACT_LINKS } from "@/lib/site-content";
 export function ContactLinksPanel() {
   return (
     <section
-      className="flex h-full w-screen shrink-0 flex-col justify-center gap-7 overflow-hidden px-[clamp(34px,7vw,110px)] py-24"
+      className="flex h-full w-screen shrink-0 flex-col justify-[safe_center] gap-7 overflow-y-auto overflow-x-hidden px-[clamp(34px,7vw,110px)] py-24"
       style={{ scrollSnapAlign: "start" }}
     >
       <h2 className="m-0 max-w-[24ch] text-[clamp(26px,3.6vw,44px)] font-light leading-[1.15] tracking-[-.025em]">

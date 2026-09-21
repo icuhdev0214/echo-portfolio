@@ -69,7 +69,7 @@ export function HomeExperience({ projects }: { projects: Project[] }) {
   return (
     <div className="fixed inset-0 overflow-hidden" style={{ background: "var(--color-bg)" }}>
       {/* Top nav */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex items-center justify-between px-[34px] py-[18px]">
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex items-center justify-between px-[clamp(16px,4vw,34px)] py-4">
         <div className="pointer-events-auto flex items-center gap-2.5">
           <div
             className="flex h-7 w-7 items-center justify-center rounded-lg text-[11px] font-semibold text-[#b5abfc]"
@@ -80,19 +80,21 @@ export function HomeExperience({ projects }: { projects: Project[] }) {
           <span className="text-[13px] font-medium">{PERSON.name}</span>
         </div>
         <div className="pointer-events-auto flex items-center gap-1">
-          {PANEL_LABELS.map((label, i) => (
-            <button
-              key={label}
-              onClick={() => goPanel(i)}
-              className="cursor-pointer rounded-lg border-none px-3 py-[7px] text-[12px] font-medium transition-colors"
-              style={{
-                background: panel === i ? "rgba(145,132,217,.18)" : "transparent",
-                color: panel === i ? "#e9e9ed" : "rgba(233,233,237,.68)",
-              }}
-            >
-              {label}
-            </button>
-          ))}
+          <span className="nav-labels flex items-center gap-1">
+            {PANEL_LABELS.map((label, i) => (
+              <button
+                key={label}
+                onClick={() => goPanel(i)}
+                className="cursor-pointer rounded-lg border-none px-3 py-[7px] text-[12px] font-medium transition-colors"
+                style={{
+                  background: panel === i ? "rgba(145,132,217,.18)" : "transparent",
+                  color: panel === i ? "#e9e9ed" : "rgba(233,233,237,.68)",
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </span>
           <Link href="/studio" className="btn btn-ghost ml-2 text-[12px]" aria-label="CMS sign in">
             CMS ↗
           </Link>
@@ -132,7 +134,7 @@ export function HomeExperience({ projects }: { projects: Project[] }) {
             />
           ))}
         </div>
-        <span className="text-[11px] text-[rgba(233,233,237,.62)]">scroll sideways · ← → keys</span>
+        <span className="dock-hint text-[11px] text-[rgba(233,233,237,.62)]">scroll sideways · ← → keys</span>
       </div>
     </div>
   );

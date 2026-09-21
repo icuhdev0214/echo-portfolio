@@ -6,7 +6,7 @@ const marquee = MARQUEE_SKILLS.concat(MARQUEE_SKILLS);
 export function StackPanel() {
   return (
     <section
-      className="flex h-full w-screen shrink-0 flex-col justify-center gap-6 overflow-hidden py-24"
+      className="flex h-full w-screen shrink-0 flex-col justify-[safe_center] gap-6 overflow-y-auto overflow-x-hidden py-24"
       style={{ scrollSnapAlign: "start" }}
     >
       <div className="px-[clamp(34px,7vw,110px)]">
