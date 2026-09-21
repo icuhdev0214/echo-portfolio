@@ -62,7 +62,10 @@ export default async function ProjectPage({
         <ProjectMedia project={project} playable />
       </div>
 
-      <div className="grid gap-[38px]" style={{ gridTemplateColumns: "minmax(0,1.7fr) minmax(0,1fr)" }}>
+      <div
+        className="grid gap-[clamp(24px,4vw,44px)]"
+        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(300px,100%), 1fr))" }}
+      >
         <div className="flex flex-col gap-[26px]">
           {project.problem && (
             <CaseSection title="Problem">

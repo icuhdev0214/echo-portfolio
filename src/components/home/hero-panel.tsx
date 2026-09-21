@@ -24,7 +24,7 @@ export function HeroPanel({ onSeeWork }: { onSeeWork: () => void }) {
 
   return (
     <section
-      className="relative flex h-full w-screen shrink-0 items-center overflow-hidden px-[clamp(34px,7vw,110px)]"
+      className="relative flex h-full w-screen shrink-0 items-[safe_center] overflow-y-auto overflow-x-hidden px-[clamp(34px,7vw,110px)]"
       style={{ scrollSnapAlign: "start", backgroundImage: "radial-gradient(circle at 20% 40%, rgba(145,132,217,.16), transparent 58%)" }}
       onMouseMove={(e) => {
         const r = e.currentTarget.getBoundingClientRect();

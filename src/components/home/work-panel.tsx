@@ -22,7 +22,7 @@ export function WorkPanel({ projects }: { projects: Project[] }) {
 
   return (
     <section
-      className="flex h-full w-screen shrink-0 flex-col justify-center gap-5 overflow-hidden px-[clamp(34px,7vw,110px)] py-24"
+      className="flex h-full w-screen shrink-0 flex-col justify-[safe_center] gap-5 overflow-y-auto overflow-x-hidden px-[clamp(34px,7vw,110px)] py-24"
       style={{ scrollSnapAlign: "start" }}
     >
       <div className="flex items-baseline justify-between gap-5">
@@ -62,13 +62,13 @@ export function WorkPanel({ projects }: { projects: Project[] }) {
         )}
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="work-toolbar flex items-center gap-3">
         <button onClick={() => nudge(-1)} className="btn btn-secondary btn-icon" aria-label="Previous projects">←</button>
         <button onClick={() => nudge(1)} className="btn btn-secondary btn-icon" aria-label="Next projects">→</button>
         <div className="h-0.5 max-w-[280px] flex-1 overflow-hidden rounded-full" style={{ background: "rgba(233,233,237,.12)" }}>
           <div className="h-full bg-(--color-accent)" style={{ width: `${Math.round(pct * 100)}%` }} />
         </div>
-        <span className="text-[11px] text-[rgba(233,233,237,.66)]">click a card for the case study</span>
+        <span className="hint-desktop text-[11px] text-[rgba(233,233,237,.66)]">click a card for the case study</span>
       </div>
     </section>
   );

@@ -255,3 +255,18 @@ html, body { height: 100%; }
 .hrail { scrollbar-width: none; -ms-overflow-style: none; }
 .hrail::-webkit-scrollbar { display: none; }
 .loop:hover .loop-track { animation-play-state: paused; }
+
+/* Responsive — mirrors the prototype's own (and only) @media block; see
+   design_handoff_portfolio/README.md's "Responsive" table. Everything else
+   is handled inline via clamp()/min() sizing, which doesn't need a query. */
+@media (max-width: 900px) {
+  .nav-labels { display: none; }
+  .hint-desktop { display: none; }
+}
+@media (max-width: 620px) {
+  .dock-hint { display: none; }
+  .work-toolbar { flex-wrap: wrap; }
+}
+@media (hover: none) {
+  .loop-track { animation-duration: 46s; }
+}
