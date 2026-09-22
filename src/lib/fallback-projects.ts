@@ -20,14 +20,14 @@ export const FALLBACK_PROJECTS: Project[] = [
     problem:
       "A premium self-photography studio in Valenzuela City needed customers to book sessions with real-time slot availability and GCash payment, while administrators needed one place to run bookings, gallery, packages, sales and site content.",
     approach:
-      "React 19, TypeScript and Vite SPA on Firebase — Firestore onSnapshot listeners for live data, Firebase Auth gating a protected admin dashboard, an Express and Vercel-serverless email layer with seven transactional templates, and a node-cron job sending 30-minute session reminders in Asia/Manila. Shipped as web, Electron and Tauri desktop, and a Capacitor Android build from the same codebase.",
+      "React 19, TypeScript and Vite SPA on Firebase — Firestore onSnapshot listeners for live data, Firebase Auth gating a protected admin dashboard, an Express and Vercel-serverless email layer with seven transactional templates, and a node-cron job sending 30-minute session reminders in Asia/Manila.",
     outcomes: [
-      { value: "4", label: "platforms from one codebase: web, Windows, macOS, Android" },
+      { value: "7", label: "automated transactional email templates" },
       { value: "13", label: "admin modules including CMS, sales ledger and bio links" },
       { value: "12", label: "Firestore collections under rule-based access control" },
     ],
-    headline: "One codebase, four platforms, thirteen admin modules",
-    tags: ["React.js", "TypeScript", "Vite", "Firebase", "Firestore", "Express", "Electron", "Tauri", "Capacitor", "Playwright", "Vercel"],
+    headline: "Real-time booking with a thirteen-module admin dashboard",
+    tags: ["React.js", "TypeScript", "Vite", "Firebase", "Firestore", "Express", "Playwright", "Vercel"],
     liveUrl: "https://itsourstudio.net",
     featured: true,
   },
