@@ -4,8 +4,12 @@
 //
 // Usage:
 //   npm install -D playwright
-//   npx playwright install chromium
 //   node scripts/capture-project-media.mjs
+//
+// Uses your locally installed Google Chrome (channel: "chrome") instead of
+// downloading Playwright's own bundled Chromium — needed on macOS versions
+// Playwright's latest Chromium build no longer supports. Make sure Chrome is
+// installed at the usual /Applications location.
 //
 // Output lands in ./media/<project>/ — a couple of PNGs plus a .webm
 // recording per site. Upload the PNGs into the project's "Screenshots"
@@ -23,7 +27,7 @@ const sites = [
   { name: "echotifeed", url: "https://main.d1rmwnn6dyfd67.amplifyapp.com/" },
 ];
 
-const browser = await chromium.launch();
+const browser = await chromium.launch({ channel: "chrome" });
 
 for (const site of sites) {
   const dir = path.join(OUT, site.name);
