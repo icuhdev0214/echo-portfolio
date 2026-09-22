@@ -28,7 +28,7 @@ export const FALLBACK_PROJECTS: Project[] = [
     ],
     headline: "Real-time booking with a thirteen-module admin dashboard",
     tags: ["React.js", "TypeScript", "Vite", "Firebase", "Firestore", "Express", "Playwright", "Vercel"],
-    liveUrl: "https://itsourstudio.net",
+    liveUrl: "https://itsourstudio-v2.vercel.app/",
     featured: true,
   },
   {
