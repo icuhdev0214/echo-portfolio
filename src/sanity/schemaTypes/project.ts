@@ -38,9 +38,55 @@ export const project = defineType({
       type: "string",
     }),
     defineField({
+      name: "domain",
+      title: "Domain",
+      description: "One line describing the space, e.g. \"Personal finance\".",
+      type: "string",
+    }),
+    defineField({
       name: "date",
       title: "Date",
       type: "date",
+    }),
+    defineField({
+      name: "problem",
+      title: "Problem",
+      description: "Case study: what problem the project solved.",
+      type: "text",
+      rows: 4,
+    }),
+    defineField({
+      name: "approach",
+      title: "Approach",
+      description: "Case study: how it was built.",
+      type: "text",
+      rows: 4,
+    }),
+    defineField({
+      name: "outcomes",
+      title: "Outcomes",
+      description: "Case study: headline metrics, e.g. \"4\" / \"platforms from one codebase\".",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          name: "outcome",
+          fields: [
+            defineField({ name: "value", title: "Value", type: "string", validation: (rule) => rule.required() }),
+            defineField({ name: "label", title: "Label", type: "string", validation: (rule) => rule.required() }),
+          ],
+          preview: {
+            select: { value: "value", label: "label" },
+            prepare: ({ value, label }) => ({ title: `${value} — ${label}` }),
+          },
+        },
+      ],
+    }),
+    defineField({
+      name: "headline",
+      title: "Headline",
+      description: "Short accent-colored one-liner shown on the project card, e.g. \"One codebase, four platforms, thirteen admin modules\".",
+      type: "string",
     }),
     defineField({
       name: "tags",
