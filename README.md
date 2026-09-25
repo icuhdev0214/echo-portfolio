@@ -2,23 +2,27 @@
 
 [![CI](https://github.com/icuhdev0214/echo-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/icuhdev0214/echo-portfolio/actions/workflows/ci.yml)
 
-Freelance portfolio: Next.js (App Router) + Tailwind + a light layer of
-hand-written shadcn-style components, content managed through an embedded
-Sanity Studio, contact handled by a serverless route via Resend. No
-traditional backend server — see `.claude/plans` history / project notes for
-the full stack rationale.
+Jerico Jabonete's personal/freelance portfolio: a horizontal-scroll,
+single-page experience (Home / Work / Stack / Contact / Inquire) built on
+Next.js (App Router) with the "nocturne" design system, content managed
+through an embedded Sanity Studio, contact handled by a serverless route via
+Resend. No traditional backend server.
 
 ## Stack
 
 - **Frontend:** Next.js 16 (App Router, TypeScript), Tailwind CSS v4
-- **UI primitives:** hand-written shadcn-style components in
-  `src/components/ui` (Radix UI + `class-variance-authority` + `tailwind-merge`)
-  — the shadcn CLI itself needs network access to `ui.shadcn.com`, which isn't
-  always available, so components are added by hand following the same
-  pattern
+- **Design system:** "nocturne" — dark, compact tokens and component
+  classes ported into `src/app/globals.css` from a Claude Design prototype.
+  No shadcn/UI primitives; the site's look comes entirely from nocturne's own
+  `.btn`/`.card`/`.field`/`.tag`/etc. classes plus Tailwind for layout
+- **UI:** a single horizontal snap-scroll shell (`src/components/home/`) —
+  nav, keyboard/wheel navigation, animated hero metrics, filterable project
+  rail, skills marquee, and the inquiry form all live as panels in one track
 - **CMS:** [Sanity](https://sanity.io), embedded at `/studio` via
   `next-sanity`. Content is fetched with GROQ and revalidated on-demand via a
-  webhook (`/api/revalidate`) instead of a full redeploy
+  webhook (`/api/revalidate`) instead of a full redeploy. Until a real
+  Sanity project is configured (or it returns no content yet), the site
+  falls back to `src/lib/fallback-projects.ts` so local dev isn't empty
 - **Contact:** `/api/contact` route sends mail via [Resend](https://resend.com);
   falls back to logging the submission if `RESEND_API_KEY`/`CONTACT_TO_EMAIL`
   aren't set (e.g. local dev)
@@ -28,8 +32,9 @@ the full stack rationale.
   needed; `vercel.json` just pins the framework/build/install commands so
   the project auto-configures consistently
 - **Testing:** end-to-end smoke tests with [Playwright](https://playwright.dev)
-  (`e2e/`), covering the home page, the contact form (success/error/honeypot/
-  pre-fill), and the `/studio` route
+  (`e2e/`), covering the home page's panels, project-card navigation, the
+  contact form (success/error/honeypot/pre-fill/segmented-control), and the
+  `/studio` route
 - **CI:** GitHub Actions (`.github/workflows/ci.yml`), split into parallel
   `lint`, `typecheck`, and `build` (which also runs the e2e suite) jobs for
   fast PR feedback — a gate independent of Vercel's own pipeline
@@ -65,7 +70,9 @@ Open [http://localhost:3000](http://localhost:3000) for the site, and
 ### Environment variables
 
 See `.env.example`. Without `NEXT_PUBLIC_SANITY_PROJECT_ID`/`DATASET` set,
-pages fall back to an empty project list instead of failing to build; without
+the app throws at startup — Sanity's client requires them. With them set but
+pointed at a project with no published `project` documents yet, pages fall
+back to `FALLBACK_PROJECTS` instead of rendering empty. Without
 `RESEND_API_KEY`/`CONTACT_TO_EMAIL`, contact form submissions are logged to
 the server console instead of emailed.
 
@@ -84,21 +91,30 @@ of running `playwright install`. CI installs its own browser normally.
 ### Sanity setup
 
 1. Create a project at [sanity.io/manage](https://www.sanity.io/manage) and
-   copy its project ID into `.env.local`.
-2. Run the app and visit `/studio` — the `project` schema
-   (`src/sanity/schemaTypes/project.ts`) is already wired up.
-3. Optionally add a webhook (Settings → API → Webhooks) pointed at
+   copy its project ID into `.env.local` (`NEXT_PUBLIC_SANITY_PROJECT_ID`;
+   dataset defaults to `production`).
+2. In your Sanity project's dashboard, go to API → CORS origins and add
+   whatever URL you use to reach the app locally (e.g. `http://localhost:3000`),
+   with "Allow credentials" checked — required for `/studio` to sign in.
+3. Run the app and visit `/studio`, sign in with the same account used to
+   create the project, and create a `Project` entry — the schema
+   (`src/sanity/schemaTypes/project.ts`) is already wired up. Only Title,
+   Slug, and Summary are required; everything else (Screenshots, Video URL,
+   Code URL, Case study URL) can be added later.
+4. Optionally add a webhook (Settings → API → Webhooks) pointed at
    `/api/revalidate` with the same secret as `SANITY_REVALIDATE_SECRET`, so
    publishing content goes live without a redeploy.
 
 ## Design
 
-The visual design comes from a Claude Design prototype ("Portfolio Prototype
-Horizontal", built on the "nocturne" design system). The current pages are a
-structural scaffold — layout and data flow are in place, but styling should
-be replaced with the ported design tokens/markup once that project is
-imported (see the plan notes for how to bring it in via Claude Design's
-"Send to Claude Code Web").
+The visual design and its horizontal-scroll interaction model come from a
+Claude Design prototype ("Portfolio Prototype Horizontal", built on the
+"nocturne" design system) and have been fully ported into the components
+under `src/components/home/`. Deliberate deviations from the raw prototype:
+the "CMS" nav link opens the real `/studio` (Sanity's hosted auth) instead
+of the prototype's fake demo login, and project cards navigate to real
+`/projects/[slug]` pages instead of an in-page overlay, for shareable/SEO
+-friendly URLs.
 
 ## Deploy
 
@@ -109,10 +125,11 @@ in the Vercel dashboard. Every push gets a preview deployment; merges to
 ### Current deployment
 
 Live on Vercel under the "Jerico's projects" team, project `echo-portfolio`,
-linked to this repo with `main` as the production branch. It's currently
-running with placeholder Sanity env vars
-(`NEXT_PUBLIC_SANITY_PROJECT_ID=placeholder`) until a real Sanity project is
-set up, so the project list renders empty; the contact form is in log-only
-mode until `RESEND_API_KEY`/`CONTACT_TO_EMAIL` are set. Swap in real values
-in the Vercel project's Environment Variables settings whenever ready — no
-code changes needed.
+linked to this repo with `main` as the production branch. Production is
+still running with placeholder Sanity env vars
+(`NEXT_PUBLIC_SANITY_PROJECT_ID=placeholder`), so it currently shows the
+fallback project content; a real Sanity project is connected for local
+development. The contact form is in log-only mode in production until
+`RESEND_API_KEY`/`CONTACT_TO_EMAIL` are set. Swap in real values in the
+Vercel project's Environment Variables settings whenever ready — no code
+changes needed.
