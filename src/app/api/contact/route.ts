@@ -1,12 +1,7 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const PROJECT_TYPES = [
-  "web-design",
-  "development",
-  "full-project",
-  "just-exploring",
-] as const;
+import { INQUIRY_KINDS } from "@/lib/site-content";
 
 function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -45,7 +40,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "Enter a valid email address." }, { status: 400 });
   }
 
-  if (projectType && !PROJECT_TYPES.includes(projectType as (typeof PROJECT_TYPES)[number])) {
+  if (projectType && !INQUIRY_KINDS.includes(projectType)) {
     return NextResponse.json({ message: "Invalid project type." }, { status: 400 });
   }
 
