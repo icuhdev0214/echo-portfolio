@@ -55,4 +55,20 @@ test.describe("Contact form", () => {
 
     await page.getByLabel("Budget range").selectOption({ label: "₱50k – ₱150k" });
   });
+
+  test("submits successfully with a project type against the real API route", async ({ page }) => {
+    // No page.route mock here on purpose: the earlier "submits successfully"
+    // test mocks /api/contact, which is exactly how a mismatch between the
+    // form's INQUIRY_KINDS values and the route's own validation list went
+    // undetected. This hits the real route (log-only in CI, no Resend key).
+    await page.goto("/?panel=inquire");
+
+    await page.getByText("Web design", { exact: true }).click();
+    await page.getByLabel("Name").fill("Ada Lovelace");
+    await page.getByLabel("Email").fill("ada@example.com");
+    await page.getByLabel("Message").fill("Interested in working together.");
+    await page.getByRole("button", { name: "Send message" }).click();
+
+    await expect(page.getByRole("status")).toHaveText(/message sent/i);
+  });
 });
