@@ -2,6 +2,14 @@
 
 [![CI](https://github.com/icuhdev0214/echo-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/icuhdev0214/echo-portfolio/actions/workflows/ci.yml)
 
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38BDF8?logo=tailwindcss&logoColor=white)
+![Sanity](https://img.shields.io/badge/CMS-Sanity-F03E2F?logo=sanity&logoColor=white)
+![Resend](https://img.shields.io/badge/Email-Resend-000000?logo=resend&logoColor=white)
+![Playwright](https://img.shields.io/badge/Tested_with-Playwright-2EAD33?logo=playwright&logoColor=white)
+![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000000?logo=vercel&logoColor=white)
+
 Jerico Jabonete's personal/freelance portfolio: a horizontal-scroll,
 single-page experience (Home / Work / Stack / Contact / Inquire) built on
 Next.js (App Router) with the "nocturne" design system, content managed
@@ -126,10 +134,7 @@ in the Vercel dashboard. Every push gets a preview deployment; merges to
 
 Live on Vercel under the "Jerico's projects" team, project `echo-portfolio`,
 linked to this repo with `main` as the production branch. Production is
-still running with placeholder Sanity env vars
-(`NEXT_PUBLIC_SANITY_PROJECT_ID=placeholder`), so it currently shows the
-fallback project content; a real Sanity project is connected for local
-development. The contact form is in log-only mode in production until
-`RESEND_API_KEY`/`CONTACT_TO_EMAIL` are set. Swap in real values in the
-Vercel project's Environment Variables settings whenever ready — no code
-changes needed.
+running with real Sanity project credentials, so the live site renders real
+published project content instead of the fallback data. The contact form
+sends real mail via Resend (`RESEND_API_KEY`/`CONTACT_TO_EMAIL` are set in
+the Vercel project's Environment Variables).
