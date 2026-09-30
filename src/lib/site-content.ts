@@ -7,8 +7,8 @@ export const PERSON = {
   phoneHref: "tel:+639562557081",
   linkedin: "linkedin.com/in/jerico-jabonete-9896a118b",
   linkedinHref: "https://linkedin.com/in/jerico-jabonete-9896a118b",
-  liveWork: "itsourstudio.net",
-  liveWorkHref: "https://itsourstudio.net",
+  liveWork: "main.d1rmwnn6dyfd67.amplifyapp.com",
+  liveWorkHref: "https://main.d1rmwnn6dyfd67.amplifyapp.com/",
 };
 
 export const HERO = {
